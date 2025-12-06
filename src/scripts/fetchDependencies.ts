@@ -2,6 +2,8 @@ import { remove, writeFile, ensureDir } from "fs-extra";
 import Path from "path";
 import AdmZip from "adm-zip";
 import spawn from "../../src/lib/helpers/cli/spawn";
+import https from "https";
+import { URL } from "url";
 
 const buildToolsRoot = Path.join(
   Path.normalize(`${__dirname}/../../`),
@@ -83,9 +85,53 @@ export const fetchGBDKDependency = async (arch: Arch) => {
   const { url, type } = dependencies[arch].gbdk;
   console.log(`URL=${url}`);
 
-  const response = await fetch(url);
-  const buffer = await response.arrayBuffer(); // Get a Buffer from the response
-  const data = Buffer.from(buffer);
+  // Use Node's built-in https module for Node.js 16 compatibility
+  const fetchWithRedirects = async (urlToFetch: string): Promise<Buffer> => {
+    return new Promise<Buffer>((resolve, reject) => {
+      const urlObj = new URL(urlToFetch);
+      const options = {
+        hostname: urlObj.hostname,
+        path: urlObj.pathname + urlObj.search,
+        headers: {
+          "User-Agent": "GB-Studio",
+        },
+      };
+
+      https
+        .get(options, (res) => {
+          // Follow redirects (301, 302, 307, 308)
+          if (
+            res.statusCode &&
+            [301, 302, 307, 308].includes(res.statusCode) &&
+            res.headers.location
+          ) {
+            res.destroy();
+            // Recursively follow redirect
+            fetchWithRedirects(res.headers.location)
+              .then(resolve)
+              .catch(reject);
+            return;
+          }
+
+          if (res.statusCode !== 200) {
+            reject(
+              new Error(
+                `Failed to fetch ${urlToFetch}: ${res.statusCode} ${res.statusMessage}`
+              )
+            );
+            return;
+          }
+
+          const chunks: Buffer[] = [];
+          res.on("data", (chunk: Buffer) => chunks.push(chunk));
+          res.on("end", () => resolve(Buffer.concat(chunks)));
+          res.on("error", reject);
+        })
+        .on("error", reject);
+    });
+  };
+
+  const data = await fetchWithRedirects(url);
   const tmpPath = Path.join(buildToolsRoot, "tmp.data");
   await writeFile(tmpPath, data);
   console.log(`Written to "${tmpPath}"`);

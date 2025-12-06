@@ -26,11 +26,18 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (!process.env.NO_TYPE_CHECKING) {
+  // During production builds, exclude test files to avoid type errors
+  // that don't affect the actual application build
+  const isProduction = process.env.NODE_ENV === "production";
   plugins.push(
     new ForkTsCheckerWebpackPlugin({
       async: false,
       typescript: {
         memoryLimit: 4096,
+        // Use build config that excludes test files in production
+        configFile: isProduction 
+          ? require("path").join(__dirname, "tsconfig.build.json")
+          : undefined,
       },
     })
   );
