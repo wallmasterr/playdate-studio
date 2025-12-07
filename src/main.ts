@@ -362,7 +362,7 @@ export const createProjectWindow = async () => {
 
   projectWindow.on("page-title-updated", (e, title) => {
     documentName = title
-      .replace(/^GB Studio -/, "")
+      .replace(/^PD Studio -/, "")
       .replace(/\(modified\)$/, "")
       .trim();
   });

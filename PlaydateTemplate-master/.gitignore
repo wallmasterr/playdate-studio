@@ -1,0 +1,7 @@
+.nova
+.cmake-build-*/
+playdate/
+*.pdx
+*.so
+*.bin
+.cmake

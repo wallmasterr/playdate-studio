@@ -12,7 +12,7 @@ const darkTheme: ThemeInterface = {
     highlight: "#c92c61",
     highlightText: "#ffffff",
     text: "#b7babb",
-    background: "#444444",
+    background: "#ffc336",
     secondaryText: "#777777",
     token: {
       variable: "#9ccc65",
@@ -68,7 +68,7 @@ const darkTheme: ThemeInterface = {
       boxShadow: "3px 3px 10px rgba(0, 0, 0, 1)",
     },
     sidebar: {
-      background: "#222222",
+      background: "#ffc336",
       border: "#000000",
       well: {
         background: "#333333",
@@ -94,7 +94,7 @@ const darkTheme: ThemeInterface = {
       hoverBackground: "#333333",
     },
     document: {
-      background: "#444444",
+      background: "#ffc336",
     },
     list: {
       text: "#b7babb",

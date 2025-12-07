@@ -51,6 +51,16 @@ if not exist "node_modules" (
     echo.
 )
 
+REM Verify electron-forge is available
+echo Verifying build tools...
+call npm list @electron-forge/cli >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo WARNING: @electron-forge/cli may not be installed correctly
+    echo Attempting to install build dependencies...
+    call npm install --save-dev @electron-forge/cli
+)
+echo.
+
 REM Fetch submodules and dependencies
 echo Fetching submodules and dependencies...
 call npm run fetch-deps
@@ -89,15 +99,25 @@ if not exist "!PROJECT_DIR!\out" (
     goto :eof
 )
 
-REM Check for main executable - try expected path first
+REM Check for main executable - try expected paths first
 set "EXE_PATH=!PROJECT_DIR!\out\GB Studio-win32-!ARCH!\gb-studio.exe"
+set "EXE_PATH_PD=!PROJECT_DIR!\out\PD Studio-win32-!ARCH!\pd-studio.exe"
+set "FOUND_EXE=0"
+
 if exist "!EXE_PATH!" (
     echo [MAIN EXECUTABLE]
     echo !EXE_PATH!
     echo.
+    set "FOUND_EXE=1"
+) else if exist "!EXE_PATH_PD!" (
+    echo [MAIN EXECUTABLE]
+    echo !EXE_PATH_PD!
+    echo.
+    set "FOUND_EXE=1"
 ) else (
     echo [MAIN EXECUTABLE] - NOT FOUND
     echo Expected: !EXE_PATH!
+    echo Or: !EXE_PATH_PD!
     echo.
     echo This indicates the build failed during compilation.
     echo.
@@ -198,14 +218,41 @@ if "!choice!"=="1" (
     echo Starting build process... This may take several minutes.
     echo Please wait, do not close this window...
     echo.
-    call npm run make:win 2>&1
+    echo Checking if 'out' directory exists before build...
+    if exist "!PROJECT_DIR!\out" (
+        echo   'out' directory exists
+    ) else (
+        echo   'out' directory does not exist (this is normal for a fresh build)
+    )
+    echo.
+    call npm run make:win
     set "BUILD_EXIT_CODE=!ERRORLEVEL!"
+    echo.
+    echo ========================================
+    echo Build command completed with exit code: !BUILD_EXIT_CODE!
+    echo ========================================
+    echo.
+    echo Checking if 'out' directory exists after build...
+    if exist "!PROJECT_DIR!\out" (
+        echo   'out' directory exists
+        echo   Listing contents of out directory:
+        dir /b "!PROJECT_DIR!\out" 2>nul || echo   (empty or error listing)
+        echo.
+        echo   Checking for subdirectories:
+        for /d %%d in ("!PROJECT_DIR!\out\*") do (
+            echo     Found: %%d
+        )
+    ) else (
+        echo   ERROR: 'out' directory was NOT created - build failed!
+    )
+    echo.
     echo.
     echo ========================================
     if "!BUILD_EXIT_CODE!"=="0" (
         REM Check if files were actually created
         set "HAS_OUTPUT=0"
         if exist "!PROJECT_DIR!\out\GB Studio-win32-x64\gb-studio.exe" set "HAS_OUTPUT=1"
+        if exist "!PROJECT_DIR!\out\PD Studio-win32-x64\pd-studio.exe" set "HAS_OUTPUT=1"
         if exist "!PROJECT_DIR!\out\make" set "HAS_OUTPUT=1"
         
         if !HAS_OUTPUT! EQU 0 (
@@ -237,6 +284,7 @@ if "!choice!"=="1" (
         REM Check if files were actually created
         set "HAS_OUTPUT=0"
         if exist "!PROJECT_DIR!\out\GB Studio-win32-ia32\gb-studio.exe" set "HAS_OUTPUT=1"
+        if exist "!PROJECT_DIR!\out\PD Studio-win32-ia32\pd-studio.exe" set "HAS_OUTPUT=1"
         if exist "!PROJECT_DIR!\out\make" set "HAS_OUTPUT=1"
         
         if !HAS_OUTPUT! EQU 0 (
@@ -270,7 +318,13 @@ if "!choice!"=="1" (
         if exist "!PROJECT_DIR!\out\GB Studio-win32-x64\gb-studio.exe" (
             set "HAS_OUTPUT=1"
             call :show_build_paths x64 x64
+        ) else if exist "!PROJECT_DIR!\out\PD Studio-win32-x64\pd-studio.exe" (
+            set "HAS_OUTPUT=1"
+            call :show_build_paths x64 x64
         ) else if exist "!PROJECT_DIR!\out\GB Studio-win32-ia32\gb-studio.exe" (
+            set "HAS_OUTPUT=1"
+            call :show_build_paths ia32 ia32
+        ) else if exist "!PROJECT_DIR!\out\PD Studio-win32-ia32\pd-studio.exe" (
             set "HAS_OUTPUT=1"
             call :show_build_paths ia32 ia32
         )
@@ -302,8 +356,12 @@ if "!choice!"=="1" (
         echo Packaged application location:
         if exist "%PROJECT_DIR%\out\GB Studio-win32-x64\gb-studio.exe" (
             echo %PROJECT_DIR%\out\GB Studio-win32-x64\gb-studio.exe
+        ) else if exist "%PROJECT_DIR%\out\PD Studio-win32-x64\pd-studio.exe" (
+            echo %PROJECT_DIR%\out\PD Studio-win32-x64\pd-studio.exe
         ) else if exist "%PROJECT_DIR%\out\GB Studio-win32-ia32\gb-studio.exe" (
             echo %PROJECT_DIR%\out\GB Studio-win32-ia32\gb-studio.exe
+        ) else if exist "%PROJECT_DIR%\out\PD Studio-win32-ia32\pd-studio.exe" (
+            echo %PROJECT_DIR%\out\PD Studio-win32-ia32\pd-studio.exe
         ) else (
             echo %PROJECT_DIR%\out\
         )

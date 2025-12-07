@@ -12,7 +12,7 @@ const lightTheme: ThemeInterface = {
     highlight: "#c92c61",
     highlightText: "#ffffff",
     text: "#3b3a3b",
-    background: "#f9f9f9",
+    background: "#ffc336",
     secondaryText: "#999999",
     token: {
       variable: "#9ccc65",
@@ -67,7 +67,7 @@ const lightTheme: ThemeInterface = {
       boxShadow: "3px 3px 10px rgba(0, 0, 0, 0.1)",
     },
     sidebar: {
-      background: "#f2f2f2",
+      background: "#ffc336",
       border: "#d4d4d4",
       well: {
         background: "#dddddd",
@@ -93,7 +93,7 @@ const lightTheme: ThemeInterface = {
       hoverBackground: "#dddddd",
     },
     document: {
-      background: "#f9f9f9",
+      background: "#ffc336",
     },
     list: {
       text: "#3b3a3b",
