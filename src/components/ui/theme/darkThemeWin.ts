@@ -8,8 +8,8 @@ const darkThemeWin: ThemeInterface = {
     text: "#e8eaed",
     toolbar: {
       ...darkTheme.colors.toolbar,
-      background: "#292a2d",
-      inactiveBackground: "#292a2d",
+      background: "#ffc336",
+      inactiveBackground: "#ffc336",
       border: "#000000",
       button: {
         ...darkTheme.colors.toolbar.button,

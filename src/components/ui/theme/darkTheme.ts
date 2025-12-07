@@ -12,7 +12,7 @@ const darkTheme: ThemeInterface = {
     highlight: "#c92c61",
     highlightText: "#ffffff",
     text: "#b7babb",
-    background: "#ffc336",
+    background: "#ffffff",
     secondaryText: "#777777",
     token: {
       variable: "#9ccc65",
@@ -23,9 +23,9 @@ const darkTheme: ThemeInterface = {
       constant: "#90caf9",
     },
     toolbar: {
-      background: "linear-gradient(to bottom, #3e4142 0%, #282a2a 100%)",
+      background: "#ffc336",
       border: "#000000",
-      inactiveBackground: "#3e4142",
+      inactiveBackground: "#ffc336",
       inactiveBorder: "#000000",
       textShadow: "none",
       button: {
@@ -68,7 +68,7 @@ const darkTheme: ThemeInterface = {
       boxShadow: "3px 3px 10px rgba(0, 0, 0, 1)",
     },
     sidebar: {
-      background: "#ffc336",
+      background: "#222222",
       border: "#000000",
       well: {
         background: "#333333",
@@ -94,7 +94,7 @@ const darkTheme: ThemeInterface = {
       hoverBackground: "#333333",
     },
     document: {
-      background: "#ffc336",
+      background: "#ffffff",
     },
     list: {
       text: "#b7babb",

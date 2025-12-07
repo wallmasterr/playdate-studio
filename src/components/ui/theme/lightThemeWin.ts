@@ -7,8 +7,8 @@ const lightThemeWin: ThemeInterface = {
     ...lightTheme.colors,
     toolbar: {
       ...lightTheme.colors.toolbar,
-      background: "#ffffff",
-      inactiveBackground: "#ffffff",
+      background: "#ffc336",
+      inactiveBackground: "#ffc336",
       border: "#dddddd",
       button: {
         ...lightTheme.colors.toolbar.button,

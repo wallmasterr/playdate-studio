@@ -100,13 +100,19 @@ if not exist "!PROJECT_DIR!\out" (
 )
 
 REM Check for main executable - try expected paths first
-set "EXE_PATH=!PROJECT_DIR!\out\GB Studio-win32-!ARCH!\gb-studio.exe"
-set "EXE_PATH_PD=!PROJECT_DIR!\out\PD Studio-win32-!ARCH!\pd-studio.exe"
+set "EXE_PATH=!PROJECT_DIR!\out\GB Studio-win32-!ARCH!\pdstudio.exe"
+set "EXE_PATH_OLD=!PROJECT_DIR!\out\GB Studio-win32-!ARCH!\gb-studio.exe"
+set "EXE_PATH_PD=!PROJECT_DIR!\out\PD Studio-win32-!ARCH!\pdstudio.exe"
 set "FOUND_EXE=0"
 
 if exist "!EXE_PATH!" (
     echo [MAIN EXECUTABLE]
     echo !EXE_PATH!
+    echo.
+    set "FOUND_EXE=1"
+) else if exist "!EXE_PATH_OLD!" (
+    echo [MAIN EXECUTABLE]
+    echo !EXE_PATH_OLD!
     echo.
     set "FOUND_EXE=1"
 ) else if exist "!EXE_PATH_PD!" (
@@ -117,6 +123,7 @@ if exist "!EXE_PATH!" (
 ) else (
     echo [MAIN EXECUTABLE] - NOT FOUND
     echo Expected: !EXE_PATH!
+    echo Or: !EXE_PATH_OLD!
     echo Or: !EXE_PATH_PD!
     echo.
     echo This indicates the build failed during compilation.
@@ -251,8 +258,9 @@ if "!choice!"=="1" (
     if "!BUILD_EXIT_CODE!"=="0" (
         REM Check if files were actually created
         set "HAS_OUTPUT=0"
+        if exist "!PROJECT_DIR!\out\GB Studio-win32-x64\pdstudio.exe" set "HAS_OUTPUT=1"
         if exist "!PROJECT_DIR!\out\GB Studio-win32-x64\gb-studio.exe" set "HAS_OUTPUT=1"
-        if exist "!PROJECT_DIR!\out\PD Studio-win32-x64\pd-studio.exe" set "HAS_OUTPUT=1"
+        if exist "!PROJECT_DIR!\out\PD Studio-win32-x64\pdstudio.exe" set "HAS_OUTPUT=1"
         if exist "!PROJECT_DIR!\out\make" set "HAS_OUTPUT=1"
         
         if !HAS_OUTPUT! EQU 0 (
@@ -283,8 +291,9 @@ if "!choice!"=="1" (
     if "!BUILD_EXIT_CODE!"=="0" (
         REM Check if files were actually created
         set "HAS_OUTPUT=0"
+        if exist "!PROJECT_DIR!\out\GB Studio-win32-ia32\pdstudio.exe" set "HAS_OUTPUT=1"
         if exist "!PROJECT_DIR!\out\GB Studio-win32-ia32\gb-studio.exe" set "HAS_OUTPUT=1"
-        if exist "!PROJECT_DIR!\out\PD Studio-win32-ia32\pd-studio.exe" set "HAS_OUTPUT=1"
+        if exist "!PROJECT_DIR!\out\PD Studio-win32-ia32\pdstudio.exe" set "HAS_OUTPUT=1"
         if exist "!PROJECT_DIR!\out\make" set "HAS_OUTPUT=1"
         
         if !HAS_OUTPUT! EQU 0 (
@@ -315,16 +324,22 @@ if "!choice!"=="1" (
         echo Checking for output files...
         echo.
         set "HAS_OUTPUT=0"
-        if exist "!PROJECT_DIR!\out\GB Studio-win32-x64\gb-studio.exe" (
+        if exist "!PROJECT_DIR!\out\GB Studio-win32-x64\pdstudio.exe" (
             set "HAS_OUTPUT=1"
             call :show_build_paths x64 x64
-        ) else if exist "!PROJECT_DIR!\out\PD Studio-win32-x64\pd-studio.exe" (
+        ) else if exist "!PROJECT_DIR!\out\GB Studio-win32-x64\gb-studio.exe" (
             set "HAS_OUTPUT=1"
             call :show_build_paths x64 x64
+        ) else if exist "!PROJECT_DIR!\out\PD Studio-win32-x64\pdstudio.exe" (
+            set "HAS_OUTPUT=1"
+            call :show_build_paths x64 x64
+        ) else if exist "!PROJECT_DIR!\out\GB Studio-win32-ia32\pdstudio.exe" (
+            set "HAS_OUTPUT=1"
+            call :show_build_paths ia32 ia32
         ) else if exist "!PROJECT_DIR!\out\GB Studio-win32-ia32\gb-studio.exe" (
             set "HAS_OUTPUT=1"
             call :show_build_paths ia32 ia32
-        ) else if exist "!PROJECT_DIR!\out\PD Studio-win32-ia32\pd-studio.exe" (
+        ) else if exist "!PROJECT_DIR!\out\PD Studio-win32-ia32\pdstudio.exe" (
             set "HAS_OUTPUT=1"
             call :show_build_paths ia32 ia32
         )
@@ -354,14 +369,18 @@ if "!choice!"=="1" (
         echo Package completed successfully!
         echo.
         echo Packaged application location:
-        if exist "%PROJECT_DIR%\out\GB Studio-win32-x64\gb-studio.exe" (
+        if exist "%PROJECT_DIR%\out\GB Studio-win32-x64\pdstudio.exe" (
+            echo %PROJECT_DIR%\out\GB Studio-win32-x64\pdstudio.exe
+        ) else if exist "%PROJECT_DIR%\out\GB Studio-win32-x64\gb-studio.exe" (
             echo %PROJECT_DIR%\out\GB Studio-win32-x64\gb-studio.exe
-        ) else if exist "%PROJECT_DIR%\out\PD Studio-win32-x64\pd-studio.exe" (
-            echo %PROJECT_DIR%\out\PD Studio-win32-x64\pd-studio.exe
+        ) else if exist "%PROJECT_DIR%\out\PD Studio-win32-x64\pdstudio.exe" (
+            echo %PROJECT_DIR%\out\PD Studio-win32-x64\pdstudio.exe
+        ) else if exist "%PROJECT_DIR%\out\GB Studio-win32-ia32\pdstudio.exe" (
+            echo %PROJECT_DIR%\out\GB Studio-win32-ia32\pdstudio.exe
         ) else if exist "%PROJECT_DIR%\out\GB Studio-win32-ia32\gb-studio.exe" (
             echo %PROJECT_DIR%\out\GB Studio-win32-ia32\gb-studio.exe
-        ) else if exist "%PROJECT_DIR%\out\PD Studio-win32-ia32\pd-studio.exe" (
-            echo %PROJECT_DIR%\out\PD Studio-win32-ia32\pd-studio.exe
+        ) else if exist "%PROJECT_DIR%\out\PD Studio-win32-ia32\pdstudio.exe" (
+            echo %PROJECT_DIR%\out\PD Studio-win32-ia32\pdstudio.exe
         ) else (
             echo %PROJECT_DIR%\out\
         )

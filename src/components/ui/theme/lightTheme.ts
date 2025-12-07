@@ -12,7 +12,7 @@ const lightTheme: ThemeInterface = {
     highlight: "#c92c61",
     highlightText: "#ffffff",
     text: "#3b3a3b",
-    background: "#ffc336",
+    background: "#ffffff",
     secondaryText: "#999999",
     token: {
       variable: "#9ccc65",
@@ -23,9 +23,9 @@ const lightTheme: ThemeInterface = {
       constant: "#90caf9",
     },
     toolbar: {
-      background: "linear-gradient(to bottom, #e8e7e8 0%, #d1d0d1 100%)",
+      background: "#ffc336",
       border: "#abaaab",
-      inactiveBackground: "#f6f6f6",
+      inactiveBackground: "#ffc336",
       inactiveBorder: "#d1d1d1",
       textShadow: "none",
       button: {
@@ -67,7 +67,7 @@ const lightTheme: ThemeInterface = {
       boxShadow: "3px 3px 10px rgba(0, 0, 0, 0.1)",
     },
     sidebar: {
-      background: "#ffc336",
+      background: "#f2f2f2",
       border: "#d4d4d4",
       well: {
         background: "#dddddd",
@@ -93,7 +93,7 @@ const lightTheme: ThemeInterface = {
       hoverBackground: "#dddddd",
     },
     document: {
-      background: "#ffc336",
+      background: "#ffffff",
     },
     list: {
       text: "#3b3a3b",

@@ -253,7 +253,22 @@ const WorldView = () => {
 
   const onMouseWheel = useCallback(
     (e: WheelEvent) => {
-      if (e.ctrlKey && !blockWheelZoom.current) {
+      if (e.ctrlKey) {
+        // Ctrl + scroll = vertical scrolling (allow default behavior)
+        // Manually scroll the container if mouse is over it
+        if (isMouseOver.current && scrollRef.current) {
+          scrollRef.current.scrollTop += e.deltaY;
+          scrollRef.current.scrollLeft += e.deltaX;
+        }
+        // Don't allow mousewheel zoom while scrolling
+        if (blockWheelZoom.current) {
+          clearTimeout(blockWheelZoom.current);
+        }
+        blockWheelZoom.current = setTimeout(() => {
+          blockWheelZoom.current = undefined;
+        }, 60);
+      } else if (!blockWheelZoom.current) {
+        // No Ctrl = zoom (prevent default scrolling)
         e.preventDefault();
         const absDeltaY = Math.abs(e.deltaY);
         if (e.deltaY < 0) {
@@ -271,17 +286,9 @@ const WorldView = () => {
             }),
           );
         }
-      } else {
-        // Don't allow mousewheel zoom while scrolling
-        if (blockWheelZoom.current) {
-          clearTimeout(blockWheelZoom.current);
-        }
-        blockWheelZoom.current = setTimeout(() => {
-          blockWheelZoom.current = undefined;
-        }, 60);
       }
     },
-    [dispatch],
+    [dispatch, scrollRef],
   );
 
   //#endregion Zoom handling

@@ -16,8 +16,8 @@ module.exports = async () => {
       {
         name: "@electron-forge/maker-squirrel",
         config: {
-          name: "gb_studio",
-          exe: "gb-studio.exe",
+          name: "pd_studio",
+          exe: "pdstudio.exe",
           loadingGif: "src/assets/app/install.gif",
           setupIcon: "src/assets/app/icon/app_icon.ico",
         },
@@ -46,7 +46,7 @@ module.exports = async () => {
     ],
     packagerConfig: {
       name: "GB Studio",
-      executableName: "gb-studio",
+      executableName: "pdstudio",
       packageManager: "yarn",
       icon: "src/assets/app/icon/app_icon",
       darwinDarkModeSupport: true,
